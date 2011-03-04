@@ -24,13 +24,25 @@ VFILES:= Homotopy.v \
 VOFILES:=$(VFILES:.v=.vo)
 GLOBFILES:=$(VFILES:.v=.glob)
 
-.PHONY: all .depend
+.PHONY: all .depend html latex pdf
 
 all: .depend $(VOFILES)
 
 clean:
-	/bin/rm -f *.vo *.glob *.~
-	cd doc; make clean
+	/bin/rm -f *.vo *.glob *.~ doc/html/* doc/latex/*
+
+doc: html pdf
+
+html: $(GLOBFILES)
+	$(COQDOC) --html --utf8 --charset utf8 --interpolate --no-lib-name -d doc/html $(VFILES)
+	/bin/cp -f homotopy.css doc/html/coqdoc.css
+
+latex:
+	echo Would generate LaTeX
+
+pdf: latex
+	echo Would generate PDF
+
 .depend:
 	$(COQDEP) $(COQLIBS) $(VFILES) > .depend
 
