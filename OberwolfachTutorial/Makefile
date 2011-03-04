@@ -26,4 +26,4 @@ doc:
 	$(PDFLATEX) univalence.tex
 
 clean:
-	/bin/rm -f *~ *.{aux,log,vo,glob,out,pdf} univalence_body.tex
+	/bin/rm -f *~ *.{aux,log,vo,glob,out} univalence_body.tex
