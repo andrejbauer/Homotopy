@@ -1,0 +1,3 @@
+[submodule "Vladimir"]
+	path = Vladimir
+	url = git://github.com/vladimirias/Foundations.git
