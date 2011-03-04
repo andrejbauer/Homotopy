@@ -27,4 +27,3 @@ doc:
 
 clean:
 	/bin/rm -f *~ *.{aux,log,vo,glob,out,pdf} univalence_body.tex
-
