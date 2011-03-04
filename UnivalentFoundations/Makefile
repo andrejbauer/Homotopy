@@ -34,7 +34,7 @@ clean:
 doc: html pdf
 
 html: $(GLOBFILES)
-	$(COQDOC) --html --utf8 --charset utf8 --interpolate --no-lib-name -d doc/html $(VFILES)
+	$(COQDOC) --html --toc --utf8 --charset utf8 --interpolate --no-lib-name -d doc/html $(VFILES)
 	/bin/cp -f homotopy.css doc/html/coqdoc.css
 
 latex:
