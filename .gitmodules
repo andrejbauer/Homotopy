@@ -1,3 +1,6 @@
 [submodule "Vladimir"]
 	path = Vladimir
 	url = git://github.com/vladimirias/Foundations.git
+[submodule "Peter"]
+	path = Peter
+	url = https://github.com/peterlefanulumsdaine/Oberwolfach-explorations.git
