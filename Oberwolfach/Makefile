@@ -3,6 +3,11 @@
 # of the others, i.e., we do not import and file from any other file. The coq_makefile
 # and coqdep utilities can be used to generate more complex Makefiles.
 
+# You may have to configure the following variables by providing the
+# exact location of the executable, for example, something like
+#
+# COQC=/Applications/CoqIdE_8.3.app/Contents/Resources/bin/coqc
+
 COQC=coqc
 COQDOC=coqdoc
 PDFLATEX=pdflatex
@@ -15,10 +20,10 @@ default: *.vo doc
 	$(COQC) $<
 
 doc:
-	pdflatex cheatsheet.tex
-	coqdoc --latex -s --body-only -o univalence_body.tex univalence.v
-	pdflatex univalence.tex
-	pdflatex univalence.tex
+	$(PDFLATEX) cheatsheet.tex
+	$(COQDOC) --latex -s --body-only -o univalence_body.tex univalence.v
+	$(PDFLATEX) univalence.tex
+	$(PDFLATEX) univalence.tex
 
 clean:
 	/bin/rm -f *~ *.{aux,log,vo,glob,out,pdf} univalence_body.tex
