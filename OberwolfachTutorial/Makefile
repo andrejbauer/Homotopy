@@ -21,7 +21,7 @@ default: *.vo doc
 
 doc:
 	$(PDFLATEX) cheatsheet.tex
-	$(COQDOC) --latex -s --body-only -o univalence_body.tex univalence.v
+	$(COQDOC) --latex --utf8 -s --body-only -o univalence_body.tex univalence.v
 	$(PDFLATEX) univalence.tex
 	$(PDFLATEX) univalence.tex
 
