@@ -13,6 +13,8 @@ Definition function_extensionality_statement := forall A B (f g : A -> B), (fora
 
 Section UnivalenceImpliesFunctionExtensionality.
 
+  (** * Univalence and Eta rule Imply Function Extensionality *)
+
   Hypothesis univalence : univalence_statement.
   Hypothesis eta_axiom : forall {A B} (h : A -> B), eta h ~~> h.
 
@@ -87,7 +89,6 @@ Section UnivalenceImpliesFunctionExtensionality.
     apply opposite; apply concat_associativity.
     path_via (idpath (f y) @ p y).
     path_via (! map f q @ map f q).
-    apply opposite; apply opposite_map.
   Defined.
 
   (** The eta axiom essentially states that [eta] is a weak equivalence. *)

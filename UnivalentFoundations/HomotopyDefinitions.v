@@ -176,7 +176,7 @@ Ltac path_induction :=
    not equal to [p] but only conntected to it with a path. We call paths between paths
    _homotopies_. The following lemmas should be self-explanatory. *)
 
-Lemma idpath_left_unit A (x y : A) (p : x ~~> y) : (idpath x @ p) ~~> p.
+Lemma idpath_left_unit A (x y : A) (p : x ~~> y) : idpath x @ p ~~> p.
 Proof.
   path_induction.
 Defined.
@@ -209,10 +209,6 @@ Defined.
 (** We place the lemmas just proved into the [Hint Resolve] database so that
    [auto] will know about them. *)
 
-Hint Resolve
-  idpath_left_unit idpath_right_unit
-  opposite_right_inverse opposite_left_inverse.
-
 Lemma concat_associativity A (w x y z : A) (p : w ~~> x) (q : x ~~> y) (r : y ~~> z) :
   (p @ q) @ r ~~> p @ (q @ r).
 Proof.
@@ -229,14 +225,14 @@ Defined.
 
 (** A path [p : x ~~> y] in a space [A] is mapped by [f : A -> B] to a map [map f p : f x
    ~~> f y] in [B]. Note that we cannot transfer [p] by just composing it with [f] because
-   [p] is _not_ a function. Instead, we use the induction principle. *)
+   [p] is _not_ a function. *)
 
-Lemma map {A B} {x y : A} (f : A -> B) (p : x ~~> y) : f x ~~> f y.
+Lemma map {A B} {x y : A} (f : A -> B) : x ~~> y -> f x ~~> f y.
 Proof.
   path_induction.
 Defined.
 
-(** The next two lemmas state that [map f p] is "functorial" in the path [p]. *)
+(** The next two lemmas state that [map_path f p] is "functorial" in the path [p]. *)
 
 Lemma idpath_map A B (x : A) (f : A -> B) : map f (idpath x) ~~> idpath (f x).
 Proof.
@@ -264,7 +260,7 @@ Defined.
 
 (** Other facts about map. *)
 
-Lemma opposite_map A B (f : A -> B) (x y : A) (p : x ~~> y) : ! (map f p) ~~> map f (! p).
+Lemma opposite_map A B (f : A -> B) (x y : A) (p : x ~~> y) : map f (! p) ~~> ! map f p.
 Proof.
   path_induction.
 Defined.
@@ -274,7 +270,6 @@ Proof.
   intro h.
   path_induction.
 Defined.
-
 
 (** So far [path_induction] has worked beautifully, but we are soon going to prove more
    complicated theorems which require smarter tactics, so we define some.
@@ -288,10 +283,14 @@ Defined.
    A specific [Hint Resolve] database [db] can be used with [auto with db]. *)
 
 Hint Resolve
-  concat_map
+  @idpath @opposite
+  idpath_left_unit idpath_right_unit
+  opposite_right_inverse opposite_left_inverse
+  homotopy_concat @map
+  idpath_map concat_map idmap_map composition_map
   opposite_map map_cancel
   opposite_concat opposite_opposite
-  homotopy_concat : path_hints.
+ : path_hints.
 
 (** By the way, we can add more hints to the database later. *)
 
@@ -314,6 +313,24 @@ Ltac path_tricks :=
 
 Ltac path_via x := apply @concat with (y := x); path_tricks.
 
+Ltac path_simpl :=
+  repeat progress first [
+      apply idpath_left_unit
+    | apply idpath_right_unit
+    | apply opposite_right_inverse
+    | apply opposite_left_inverse
+    | apply opposite_concat
+    | apply opposite_opposite
+    | apply map
+    | apply idpath_map
+    | apply concat_map
+    | apply idmap_map
+    | apply composition_map
+    | apply opposite_map
+    | apply map_cancel
+    | idtac
+  ].
+
 (** Here are several more facts about [map] which have slightly more involved proofs. We use
    the just defined tactics. The proofs a little too manual, obviously we need even better
    tactics which will allow us to argue about paths as if they were equalities. *)
@@ -324,7 +341,6 @@ Proof.
   induction q.
   path_via (p x).
   apply idpath_left_unit.
-  apply opposite; apply idpath_right_unit.
 Defined.
 
 Hint Resolve map_naturality : path_hints.
@@ -336,7 +352,6 @@ Proof.
   path_via (p x).
   path_via (idpath (f x) @ p x).
   path_via (p x @ idpath (g x)).
- apply opposite; auto.
 Defined.
 
 Lemma concat_cancel_right A (x y z : A) (p q : x ~~> y) (r : y ~~> z) : p @ r ~~> q @ r -> p ~~> q.
@@ -353,7 +368,6 @@ Proof.
   induction p.
   induction r.
   path_via (idpath x @ q).
-  apply opposite; auto.
 Defined.
 
 Lemma concat_move_over_left A (x y z : A) (p : x ~~> z) (q : x ~~> y) (r : y ~~> z) :
@@ -385,7 +399,6 @@ Lemma map_action A (f : A -> A) (p : forall x, f x ~~> x) (y z : A) (q : f z ~~>
 Proof.
   path_via (p (f z) @ q).
   apply endomap_homotopy_commute.
-  apply opposite; apply map_naturality.
 Defined.
 
 (** * Homotopy between maps
@@ -500,7 +513,6 @@ Proof.
   path_via q.
   path_via (!(idpath (f x)) @ q).
   path_via (idpath (f x) @ q).
-  apply opposite; auto.
 Defined.
 
 (** A weak equivalence is a map whose homotopy fibers are contractible. *)
