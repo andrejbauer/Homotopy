@@ -31,14 +31,14 @@ clean:
 doc: html pdf
 
 html: $(GLOBFILES)
-	$(COQDOC) --html --toc --utf8 --charset utf8 --interpolate --no-lib-name -d doc/html $(VFILES)
+	$(COQDOC) --html --toc --utf8 --charset utf8 --interpolate -d doc/html $(VFILES)
 	/bin/cp -f homotopy.css doc/html/coqdoc.css
 	echo +++++;\
 	echo +++++ HMTL documentation doc/html was generated successfully;\
 	echo +++++
 
 latex: $(GLOBFILES)
-	$(COQDOC) --latex --toc --utf8 --charset utf8 --interpolate -o doc/latex/UnivalentFoundations.tex $(VFILES)
+	$(COQDOC) --latex --toc --utf8 --charset utf8 --interpolate -p '\usepackage{amssymb}' -o doc/latex/UnivalentFoundations.tex $(VFILES)
 	if [ ! -f doc/latex/coqdoc.sty ] ; then echo coqdoc.sty not found, using my own; cp coqdoc.sty doc/latex; fi
 
 pdf: latex

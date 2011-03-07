@@ -1,5 +1,9 @@
 (** Basic homotopy-theoretic definitions. *)
 
+(** For compatibility with Coq 8.2 we unset automatic parameter introduction. *)
+
+Unset Automatic Introduction.
+
 (**
    We think of elements of [Type] as spaces or homotopy types. A type
    family [P : A -> Type] corresponds to a fibration whose base is [A]
@@ -116,7 +120,7 @@ Hint Resolve @idpath.
 
 Definition concat {A} {x y z : A} : (x ~~> y) -> (y ~~> z) -> (x ~~> z).
 Proof.
-  intros p q.
+  intros A x y z p q.
   induction p.
   induction q.
   apply idpath.
@@ -137,7 +141,7 @@ Notation "p @ q" := (concat p q) (at level 60).
 
 Definition opposite {A} {x y : A} : (x ~~> y) -> (y ~~> x).
 Proof.
-  intros p.
+  intros A x y p.
   induction p.
   apply idpath.
 Defined.
@@ -356,6 +360,7 @@ Defined.
 
 Lemma concat_cancel_right A (x y z : A) (p q : x ~~> y) (r : y ~~> z) : p @ r ~~> q @ r -> p ~~> q.
 Proof.
+  intros A x y z p q r.
   intro a.
   induction p.
   induction r.
@@ -364,6 +369,7 @@ Defined.
 
 Lemma concat_cancel_left A (x y z : A) (p : x ~~> y) (q r : y ~~> z) : p @ q ~~> p @ r -> q ~~> r.
 Proof.
+  intros A x y z p q r.
   intro a.
   induction p.
   induction r.
@@ -373,6 +379,7 @@ Defined.
 Lemma concat_move_over_left A (x y z : A) (p : x ~~> z) (q : x ~~> y) (r : y ~~> z) :
   p ~~> q @ r -> p @ !r ~~> q.
 Proof.
+  intros A x y z p q r.
   intro a.
   apply concat_cancel_right with (r := r).
   path_via (p @ (!r @ r)).
@@ -383,6 +390,7 @@ Defined.
   
 Lemma endomap_homotopy_commute A (f : A -> A) (p : forall x, f x ~~> x) (x : A) : map f (p x) ~~> p (f x).
 Proof.
+  intros A f p x.
   path_via (map f (p x) @ (p x @ !p x)).
   path_via (map f (p x) @ idpath (f x)); apply opposite; auto.
   path_via ((map f (p x) @ p x) @ !p x).
@@ -397,6 +405,7 @@ Defined.
 Lemma map_action A (f : A -> A) (p : forall x, f x ~~> x) (y z : A) (q : f z ~~> y) :
   map f (p z) @ q ~~> map f q @ p y.
 Proof.
+  intros A f p y z q.
   path_via (p (f z) @ q).
   apply endomap_homotopy_commute.
 Defined.
@@ -448,6 +457,7 @@ Defined.
 Lemma total_paths (A : Type) (P : A -> Type) (x y : sigT P) (p : projT1 x ~~> projT1 y) :
   (transport p (projT2 x) ~~> projT2 y) -> (x ~~> y).
 Proof.
+  intros A P x y p.
   intros q.
   destruct x as [x H].
   destruct y as [y G].
@@ -509,6 +519,7 @@ Ltac contract_hfiber y p :=
 Lemma transport_hfiber A B (f : A -> B) (x y : A) (z : B) (p : x ~~> y) (q : f x ~~> z) :
   transport (P := fun x => f x ~~> z) p q ~~> !(map f p) @ q.
 Proof.
+  intros A B f x y z p q.
   induction p.
   path_via q.
   path_via (!(idpath (f x)) @ q).

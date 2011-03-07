@@ -3,6 +3,10 @@
 
 Require Import HomotopyDefinitions WeakEquivalence.
 
+(** For compatibility with Coq 8.2 we unset automatic parameter introduction. *)
+
+Unset Automatic Introduction.
+
 Definition univalence_statement := forall U V, is_wequiv (@path_to_weq U V).
 
 Definition eta {A B} (f : A -> B) := fun x => f x.
@@ -22,6 +26,7 @@ Section UnivalenceImpliesFunctionExtensionality.
 
   Definition weq_to_path {U V} : wequiv U V -> U ~~> V.
   Proof.
+    intros U V.
     apply weq_inv.
     exists (@path_to_weq U V).
     apply univalence.
@@ -31,6 +36,7 @@ Section UnivalenceImpliesFunctionExtensionality.
 
   Lemma weq_to_path_section U V : forall (w : wequiv U V), path_to_weq (weq_to_path w) ~~> w.
   Proof.
+    intros U V.
     intro w.
     exact (weq_inv_is_section _ _ (existT _ (@path_to_weq U V) (univalence U V)) w).
   Defined.
@@ -40,6 +46,7 @@ Section UnivalenceImpliesFunctionExtensionality.
 
   Definition pred_weq_to_path U V : (wequiv U V -> Type) -> (U ~~> V -> Type).
   Proof.
+    intros U V.
     intros Q p.
     apply Q.
     apply path_to_weq.
@@ -54,6 +61,7 @@ Section UnivalenceImpliesFunctionExtensionality.
   Theorem weq_induction (P : forall U V, wequiv U V -> Type) :
     (forall T, P T T (idweq T)) -> (forall U V (w : wequiv U V), P U V w).
   Proof.
+    intros P.
     intro r.
     pose (P' := (fun U V => pred_weq_to_path U V (P U V))).
     assert (r' : forall T : Type, P' T T (idpath T)).
@@ -69,6 +77,7 @@ Section UnivalenceImpliesFunctionExtensionality.
 
   Lemma weq_pointwise_idmap A (f : A -> A) : (forall x, f x ~~> x) -> is_wequiv f.
   Proof.
+    intros A f.
     intros p y.
     contract_hfiber y (p y).
     apply total_paths with (p := ! (p z) @ q).
@@ -95,6 +104,7 @@ Section UnivalenceImpliesFunctionExtensionality.
 
   Theorem etaweq A B : wequiv (A -> B) (A -> B).
   Proof.
+    intros A B.
     exists (@eta A B).
     apply weq_pointwise_idmap.
     apply eta_axiom.
@@ -121,6 +131,7 @@ Section UnivalenceImpliesFunctionExtensionality.
 
   Definition src A : wequiv (path_space A) A.
   Proof.
+    intro A.
     exists (fun p => fst (projT1 p)).
     intros x.
     eexists (existT _ (existT (fun (xy : A * A) => fst xy ~~> snd xy) (x,x) (idpath x)) _).
@@ -133,6 +144,7 @@ Section UnivalenceImpliesFunctionExtensionality.
 
   Definition trg A : wequiv (path_space A) A.
   Proof.
+    intro A.
     exists (fun p => snd (projT1 p)).
     intros x.
     eexists (existT _ (existT (fun (xy : A * A) => fst xy ~~> snd xy) (x,x) (idpath x)) _).
@@ -159,6 +171,7 @@ Section UnivalenceImpliesFunctionExtensionality.
 
   Theorem extensionality {A B : Set} (f g : A -> B) : (forall x, f x ~~> g x) -> (f ~~> g).
   Proof.
+    intros A B f g.
     intro p.
     pose (d := fun x : A => existT (fun xy => fst xy ~~> snd xy) (f x, f x) (idpath (f x))).
     pose (e := fun x : A => existT (fun xy => fst xy ~~> snd xy) (f x, g x) (p x)).

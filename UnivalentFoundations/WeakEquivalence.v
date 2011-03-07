@@ -2,10 +2,15 @@
 
 Require Import HomotopyDefinitions.
 
+(** For compatibility with Coq 8.2 we unset automatic parameter introduction. *)
+
+Unset Automatic Introduction.
+
 (** The identity map is a weak equivalence. *)
 
 Definition idweq A : wequiv A A.
 Proof.
+  intro A.
   exists (idmap A).
   intros x.
   contract_hfiber x (idpath x).
@@ -19,6 +24,7 @@ Defined.
 
 Definition path_to_weq {U V} : U ~~> V -> wequiv U V.
 Proof.
+  intros U v.
   intro p.
   induction p as [S].
   exact (idweq S).
@@ -28,6 +34,7 @@ Defined.
 
 Definition weq_inv {U V} : wequiv U V -> (V -> U).
 Proof.
+  intros U V.
   intros [w H] y.
   destruct (H y) as [[x p] _].
   exact x.
@@ -38,6 +45,7 @@ Defined.
 
 Lemma weq_inv_is_section U V (w : wequiv U V) : forall y : V, w (weq_inv w y) ~~> y.
 Proof.
+  intros U V w.
   intro y.
   destruct w as [w G].
   simpl.
@@ -47,6 +55,7 @@ Defined.
 
 Lemma weq_inv_is_retraction U V (w : wequiv U V) : forall x : U, (weq_inv w (w x)) ~~> x.
 Proof.
+  intros U V w.
   intro x.
   destruct w as [w H].
   simpl.
@@ -61,6 +70,7 @@ Defined.
 
 Lemma weq_injective U V : forall (w : wequiv U V) x y, w x ~~> w y -> x ~~> y.
 Proof.
+  intros U V.
   intros w x y.
   simpl.
   intro p.
