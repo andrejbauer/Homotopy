@@ -2,3 +2,15 @@ This repository contains various files related to "homotopy type
 theory". Each subdirectory contains a README file which you can
 inspect to get a description of what is in there.
 
+
+The repository contains submodules for Vladimir Voevodsky's and
+Peter Lumsdaine's repositories. You can obtain those automatically
+by giving the --recursive option when you clone this repository:
+
+  git clone <this-repository-address>
+
+If you have already cloned this repository without --recursive,
+you can still get the submodules with
+
+  git submodule update --init --recursive
+
