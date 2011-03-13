@@ -8,6 +8,7 @@ Unset Automatic Introduction.
 
 (** The interval is a Type. *)
 
+(** printing ~~> $\leadsto$ *)
 (** printing Interval $[0,1]$ #[0,1]# *)
 
 Axiom Interval : Type.
@@ -80,6 +81,7 @@ Print interval_path.
   exact (!segment).
 Defined.
 
+(** The following is a silly exercise since the interval is contractible. *)
 Lemma twist_involution : forall t : Interval, twist (twist t) ~~> t.
 Proof.
   intro t.
