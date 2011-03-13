@@ -7,7 +7,7 @@ The repository contains submodules for Vladimir Voevodsky's and
 Peter Lumsdaine's repositories. You can obtain those automatically
 by giving the --recursive option when you clone this repository:
 
-  git clone <this-repository-address>
+  git clone --recursive <this-repository-address>
 
 If you have already cloned this repository without --recursive,
 you can still get the submodules with
