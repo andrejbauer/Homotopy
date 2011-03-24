@@ -2,5 +2,5 @@
    of Vladimir Voevodsk'y Univalent Foundations. *)
 
 Require Export HomotopyDefinitions.
-Require Export WeakEquivalence.
+Require Export Equivalence.
 Require Export ExtraPrinciples.

@@ -493,7 +493,7 @@ Definition contractible A := {x : A & forall y : A, y ~~> x}.
 Definition hfiber {A B} (f : A -> B) (y : B) := {x : A & f x ~~> y}.
 
 (** Here is yet another tactic which helps us prove that a homotopy fiber is contractible.
-   This will be useful for showing that maps are weak equivalences. *)
+   This will be useful for showing that maps are equivalences. *)
 
 Ltac contract_hfiber y p :=
   match goal with
@@ -525,23 +525,23 @@ Proof.
   path_via (idpath (f x) @ q).
 Defined.
 
-(** A weak equivalence is a map whose homotopy fibers are contractible. *)
+(** An equivalence is a map whose homotopy fibers are contractible. *)
 
-Definition is_wequiv {A B} (f : A -> B) := forall y : B, contractible (hfiber f y).
+Definition is_equiv {A B} (f : A -> B) := forall y : B, contractible (hfiber f y).
 
-(** [wequiv A B] is the space of weak equivalences from [A] to [B]. *)
+(** [equiv A B] is the space of equivalences from [A] to [B]. *)
 
-Definition wequiv A B := { w : A -> B & is_wequiv w }.
+Definition equiv A B := { w : A -> B & is_equiv w }.
 
-(** Strictly speaking, an element [w] of [wequiv A B] is a _pair_ consisting of a map
-   [projT1 w] and the proof [projT2 w] that it is a weak equivalence. Thus, in order
+(** Strictly speaking, an element [w] of [equiv A B] is a _pair_ consisting of a map
+   [projT1 w] and the proof [projT2 w] that it is an equivalence. Thus, in order
    to apply [w] to [x] we must write [projT1 w x]. Coq is able to do this automatically
-   if we declare that [projT1] is a _coercion_ from [wequiv A B] to [A -> B]. *)
+   if we declare that [projT1] is a _coercion_ from [equiv A B] to [A -> B]. *)
 
-Definition wequiv_coerce_to_function : forall A B, wequiv A B -> (A -> B).
+Definition equiv_coerce_to_function : forall A B, equiv A B -> (A -> B).
 Proof.
   intros A B w.
   exact (projT1 w).
 Defined.
 
-Coercion wequiv_coerce_to_function : wequiv >-> Funclass.
+Coercion equiv_coerce_to_function : equiv >-> Funclass.

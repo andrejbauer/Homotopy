@@ -1,4 +1,4 @@
-(** Basic definitions and theorems about weak equivalences. *)
+(** Basic definitions and theorems about equivalences. *)
 
 Require Import HomotopyDefinitions.
 
@@ -6,9 +6,9 @@ Require Import HomotopyDefinitions.
 
 Unset Automatic Introduction.
 
-(** The identity map is a weak equivalence. *)
+(** The identity map is an equivalence. *)
 
-Definition idweq A : wequiv A A.
+Definition idequiv A : equiv A A.
 Proof.
   intro A.
   exists (idmap A).
@@ -20,19 +20,19 @@ Proof.
   path_induction.
 Defined.
 
-(** Every path between spaces gives a weak equivalence. *)
+(** Every path between spaces gives an equivalence. *)
 
-Definition path_to_weq {U V} : U ~~> V -> wequiv U V.
+Definition path_to_equiv {U V} : U ~~> V -> equiv U V.
 Proof.
   intros U v.
   intro p.
   induction p as [S].
-  exact (idweq S).
+  exact (idequiv S).
 Defined.
 
-(** From a weak equivalence from [U] to [V] we can extract a map in the inverse direction. *)
+(** From an equivalence from [U] to [V] we can extract a map in the inverse direction. *)
 
-Definition weq_inv {U V} : wequiv U V -> (V -> U).
+Definition equiv_inv {U V} : equiv U V -> (V -> U).
 Proof.
   intros U V.
   intros [w H] y.
@@ -43,7 +43,7 @@ Defined.
 (** The extracted map in the inverse direction is actually an inverse (up to homotopy, of
    course). *)
 
-Lemma weq_inv_is_section U V (w : wequiv U V) : forall y : V, w (weq_inv w y) ~~> y.
+Lemma equiv_inv_is_section U V (w : equiv U V) : forall y : V, w (equiv_inv w y) ~~> y.
 Proof.
   intros U V w.
   intro y.
@@ -53,7 +53,7 @@ Proof.
   exact p.
 Defined.
 
-Lemma weq_inv_is_retraction U V (w : wequiv U V) : forall x : U, (weq_inv w (w x)) ~~> x.
+Lemma equiv_inv_is_retraction U V (w : equiv U V) : forall x : U, (equiv_inv w (w x)) ~~> x.
 Proof.
   intros U V w.
   intro x.
@@ -65,19 +65,19 @@ Proof.
   exact (!r).
 Defined.
 
-(** The last general fact about weak equivalences that we need is that they are injective
+(** The last general fact about equivalences that we need is that they are injective
    on paths, which is not too surprising, given that they have sections. *)
 
-Lemma weq_injective U V : forall (w : wequiv U V) x y, w x ~~> w y -> x ~~> y.
+Lemma equiv_injective U V : forall (w : equiv U V) x y, w x ~~> w y -> x ~~> y.
 Proof.
   intros U V.
   intros w x y.
   simpl.
   intro p.
-  assert (q := map (weq_inv w) p).
-  path_via (weq_inv w (w x)).
-  apply opposite; apply weq_inv_is_retraction.
-  path_via (weq_inv w (w y)).
-  apply weq_inv_is_retraction.
+  assert (q := map (equiv_inv w) p).
+  path_via (equiv_inv w (w x)).
+  apply opposite; apply equiv_inv_is_retraction.
+  path_via (equiv_inv w (w y)).
+  apply equiv_inv_is_retraction.
 Defined.
 

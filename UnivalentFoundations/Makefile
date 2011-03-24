@@ -15,7 +15,7 @@ COQDOC:=$(COQBIN)coqdoc
 
 VFILES:= Homotopy.v \
   HomotopyDefinitions.v \
-  WeakEquivalence.v \
+  Equivalence.v \
   ExtraPrinciples.v
 
 VOFILES:=$(VFILES:.v=.vo)
