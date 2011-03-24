@@ -231,12 +231,12 @@ Defined.
    ~~> f y] in [B]. Note that we cannot transfer [p] by just composing it with [f] because
    [p] is _not_ a function. *)
 
-Lemma map {A B} {x y : A} (f : A -> B) : x ~~> y -> f x ~~> f y.
+Lemma map {A B} {x y : A} (f : A -> B) : (x ~~> y) -> (f x ~~> f y).
 Proof.
   path_induction.
 Defined.
 
-(** The next two lemmas state that [map_path f p] is "functorial" in the path [p]. *)
+(** The next two lemmas state that [map f p] is "functorial" in the path [p]. *)
 
 Lemma idpath_map A B (x : A) (f : A -> B) : map f (idpath x) ~~> idpath (f x).
 Proof.
@@ -271,7 +271,6 @@ Defined.
 
 Lemma map_cancel A B (f : A -> B) (x y : A) (p q : x ~~> y) : p ~~> q -> (map f p ~~> map f q).
 Proof.
-  intro h.
   path_induction.
 Defined.
 
@@ -336,7 +335,7 @@ Ltac path_simpl :=
   ].
 
 (** Here are several more facts about [map] which have slightly more involved proofs. We use
-   the just defined tactics. The proofs a little too manual, obviously we need even better
+   the just defined tactics. The proofs are a little too manual; obviously we need even better
    tactics which will allow us to argue about paths as if they were equalities. *)
 
 Lemma map_naturality A (f : A -> A) (p : forall x, f x ~~> x) (x y : A) (q : x ~~> y) :
@@ -358,7 +357,7 @@ Proof.
   path_via (p x @ idpath (g x)).
 Defined.
 
-Lemma concat_cancel_right A (x y z : A) (p q : x ~~> y) (r : y ~~> z) : p @ r ~~> q @ r -> p ~~> q.
+Lemma concat_cancel_right A (x y z : A) (p q : x ~~> y) (r : y ~~> z) : (p @ r ~~> q @ r) -> (p ~~> q).
 Proof.
   intros A x y z p q r.
   intro a.
@@ -367,7 +366,7 @@ Proof.
   path_via (q @ idpath x).
 Defined.
 
-Lemma concat_cancel_left A (x y z : A) (p : x ~~> y) (q r : y ~~> z) : p @ q ~~> p @ r -> q ~~> r.
+Lemma concat_cancel_left A (x y z : A) (p : x ~~> y) (q r : y ~~> z) : (p @ q ~~> p @ r) -> (q ~~> r).
 Proof.
   intros A x y z p q r.
   intro a.
@@ -508,7 +507,7 @@ Ltac contract_hfiber y p :=
 (** Let us explain the tactic. It accepts two arguments [y] and [p] and attempts to
    contract a homotopy fiber to [existT _ y p]. It first looks for a goal of the form
    [contractible (hfiber f x)], where the question marks in [?f] and [?x] are pattern
-   variables that Coq should match against the actualy values. If the goal is found, then
+   variables that Coq should match against the actual values. If the goal is found, then
    we use [eexists] to specify that the center of retraction is at the element [existT _ y
    p] of hfiber provided by the user. After that we generate some fresh names and perfrom
    intros. *)

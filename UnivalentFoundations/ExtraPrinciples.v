@@ -13,7 +13,7 @@ Definition eta {A B} (f : A -> B) := fun x => f x.
 
 Definition eta_rule_statement := forall A B (f : A -> B), eta f ~~> f.
 
-Definition function_extensionality_statement := forall A B (f g : A -> B), (forall x, f x ~~> g x) -> f ~~> g.
+Definition function_extensionality_statement := forall A B (f g : A -> B), (forall x, f x ~~> g x) -> (f ~~> g).
 
 Section UnivalenceImpliesFunctionExtensionality.
 
